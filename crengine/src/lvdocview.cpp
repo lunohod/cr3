@@ -127,12 +127,12 @@ LVDocView::LVDocView(int bitsPerPixel) :
 			m_pageMargins(DEFAULT_PAGE_MARGIN,
 					DEFAULT_PAGE_MARGIN / 2 /*+ INFO_FONT_SIZE + 4 */,
 					DEFAULT_PAGE_MARGIN, DEFAULT_PAGE_MARGIN / 2),
-			m_pagesVisible(2), m_pageHeaderInfo(PGHDR_PAGE_NUMBER
+                        m_pagesVisible(2), m_pageHeaderInfo(PGHDR_PAGE_NUMBER
 #ifndef LBOOK
-					| PGHDR_CLOCK
+                                        | PGHDR_CLOCK
 #endif
-					| PGHDR_BATTERY | PGHDR_PAGE_COUNT | PGHDR_AUTHOR
-					| PGHDR_TITLE), m_showCover(true)
+                                        | PGHDR_BATTERY | PGHDR_PAGE_COUNT | PGHDR_AUTHOR
+                                        | PGHDR_TITLE), m_showCover(true)
 #if CR_INTERNAL_PAGE_ORIENTATION==1
 			, m_rotateAngle(CR_ROTATE_ANGLE_0)
 #endif
@@ -1084,11 +1084,11 @@ int LVDocView::GetFullHeight() {
 int LVDocView::getPageHeaderHeight() {
 	if (!getPageHeaderInfo())
 		return 0;
-        int h = getInfoFont()->getHeight();
-        int bh = m_batteryIcons.length()>0 ? m_batteryIcons[0]->GetHeight() * 11/10 + HEADER_MARGIN / 2 : 0;
-        if ( bh>h )
-            h = bh;
-        return h + HEADER_MARGIN;
+    int h = getInfoFont()->getHeight();
+    int bh = m_batteryIcons.length()>0 ? m_batteryIcons[0]->GetHeight() * 11/10 + HEADER_MARGIN / 2 : 0;
+    if ( bh>h )
+        h = bh;
+    return h + HEADER_MARGIN;
 }
 
 /// calculate page header rectangle
@@ -1413,6 +1413,8 @@ void LVDocView::setPageHeaderOverride(lString16 s) {
 /// draw page header to buffer
 void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
 		int pageIndex, int phi, int pageCount) {
+
+    //FIXME: no header on onyx 
 	lvRect oldcr;
 	drawbuf->GetClipRect(&oldcr);
 	lvRect hrc = headerRc;
@@ -2172,7 +2174,7 @@ LVRef<ldomXRange> LVDocView::getPageDocumentRange(int pageIndex) {
 	LVLock lock(getMutex());
 	checkRender();
 	LVRef < ldomXRange > res(NULL);
-	if (isScrollMode()) {
+        if (isScrollMode()) {
 		// SCROLL mode
 		int starty = _pos;
 		int endy = _pos + m_dy;
@@ -2240,14 +2242,44 @@ int LVDocView::getCurrentPageImageCount()
     return cnt.get();
 }
 
+LVRef<ldomXRange> LVDocView::getScrollPageDocumentRange(int pageIndex) {
+        LVLock lock(getMutex());
+        checkRender();
+        LVRef < ldomXRange > res(NULL);
+
+        // SCROLL mode
+        int starty = _pos;
+        int endy = _pos + m_dy;
+        int fh = GetFullHeight();
+        if (endy >= fh)
+                endy = fh - 1;
+        ldomXPointer start = m_doc->createXPointer(lvPoint(0, starty));
+        ldomXPointer end = m_doc->createXPointer(lvPoint(0, endy));
+        if (start.isNull() || end.isNull())
+                return res;
+        res = LVRef<ldomXRange> (new ldomXRange(start, end));
+
+        return res;
+}
+
 /// get page text, -1 for current page
 lString16 LVDocView::getPageText(bool, int pageIndex) {
 	LVLock lock(getMutex());
 	checkRender();
 	lString16 txt;
 	LVRef < ldomXRange > range = getPageDocumentRange(pageIndex);
-	txt = range->getRangeText();
+        txt = range->getRangeText();
 	return txt;
+}
+
+lString16 LVDocView::getAllPageText(int pageIndex)
+{
+    LVLock lock(getMutex());
+    checkRender();
+    lString16 txt;
+    LVRef < ldomXRange > range = getScrollPageDocumentRange(pageIndex);
+    txt = range->getRangeText();
+    return txt;
 }
 
 void LVDocView::setRenderProps(int dx, int dy) {
@@ -4241,6 +4273,9 @@ void LVDocView::updateScroll() {
 			} else
 				sprintf(str, "%d / %d", page, m_pages.length() - 1);
 		}
+                if ( m_callback ) {
+                    m_callback->OnLoadFileEnd();
+                }
 		m_scrollinfo.posText = lString16(str);
 	}
 }

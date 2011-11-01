@@ -689,12 +689,14 @@ public:
     void updateBookMarksRanges();
     /// get page document range, -1 for current page
     LVRef<ldomXRange> getPageDocumentRange( int pageIndex=-1 );
+    LVRef<ldomXRange> getScrollPageDocumentRange(int pageIndex=-1 );
     /// get page text, -1 for current page
     lString16 getPageText( bool wrapWords, int pageIndex=-1 );
     /// returns number of non-space characters on current page
     int getCurrentPageCharCount();
     /// returns number of images on current page
     int getCurrentPageImageCount();
+    lString16 getAllPageText(int pageIndex=-1);
     /// calculate page header rectangle
     virtual void getPageHeaderRectangle( int pageIndex, lvRect & headerRc );
     /// calculate page header height
