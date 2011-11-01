@@ -5,4 +5,4 @@ jccoefct.c  jcmainct.c  jcphuff.c   jdapistd.c  jddctmgr.c  jdmaster.c  jdtrans.
 jccolor.c   jcmarker.c  jcprepct.c  jdatadst.c  jdhuff.c    jdmerge.c   jerror.c    jidctfst.c  jquant1.c
 jcdctmgr.c  jcmaster.c  jcsample.c  jdatasrc.c  jdinput.c   jdphuff.c   jfdctflt.c  jidctint.c  jquant2.c
 )
-ADD_LIBRARY(jpeg STATIC ${JPEG_SOURCES})
+ADD_LIBRARY(jpeg_cr3 STATIC ${JPEG_SOURCES})

@@ -259,6 +259,7 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
         fontDirs.add( lString16(L"/usr/share/crengine/fonts") );
         fontDirs.add( lString16(L"/usr/share/fonts/truetype/freefont") );
         fontDirs.add( lString16(L"/root/fonts/truetype") );
+        fontDirs.add( lString16(L"/usr/share/fonts") );
         //fontDirs.add( lString16(L"/usr/share/fonts/truetype/msttcorefonts") );
         for ( int fi=0; msfonts[fi]; fi++ )
             fonts.add( lString16(L"/usr/share/fonts/truetype/msttcorefonts/") + lString16(msfonts[fi]) );

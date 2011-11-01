@@ -67,7 +67,7 @@
 #define GRAY_INVERSE                         0
 #define USE_FREETYPE                         1
 #ifndef ANDROID
-#define USE_FONTCONFIG						 1
+#define USE_FONTCONFIG			     0
 #endif
 #define ALLOW_KERNING                        1
 #define GLYPH_CACHE_SIZE                     0x40000
