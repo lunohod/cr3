@@ -7,3 +7,8 @@ qtbuild
 qt-build
 qtcreator-build
 *~
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeFiles
+Makefile
+moc_*.cxx
