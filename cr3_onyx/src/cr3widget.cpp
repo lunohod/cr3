@@ -1396,6 +1396,7 @@ void CR3View::processKeyReleaseEvent(int key)
         prevPageWithTTSChecking();
         break;
     default:
+        /*
         if (dict_widget_->isInRetrieveWordsMode()) {
             switch (key) {
                 case Qt::Key_Up:
@@ -1418,6 +1419,7 @@ void CR3View::processKeyReleaseEvent(int key)
                     break;
             }
         }
+        */
         break;
     }
 }
